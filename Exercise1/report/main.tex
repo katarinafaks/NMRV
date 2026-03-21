@@ -54,68 +54,199 @@ on different types of images and analyze their performance.
 
 \section{Experiments}
 
-\subsection{Rotated random noise}
+\subsection{Testing on different types of images}
 First, we tested the methods on an image of random noise that has been rotated by 1 degree. The results
-are visible in~\ref{fig:noise}. We can see that they both produced smooth flow fields showing the rotation of the random image. 
+are visible in figure~\ref{fig:noise}. HS produces smooth flow due to the global regularization term, while LK
+appears smooth here, because random noise has gradients in all directions, which meeans it can calculate flow everywhere.
+
 
 \begin{figure}[h]
     \centering
-    \begin{subfigure}[b]{0.2\textwidth}
+    \begin{subfigure}[b]{0.23\textwidth}
         \includegraphics[width=\textwidth]{HS_randomNoise.png}
         \caption{Horn-Shunck method.}\label{fig:noise_hs}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.2\textwidth}
+    \begin{subfigure}[b]{0.23\textwidth}
         \includegraphics[width=\textwidth]{LK_randomNoise.png}
         \caption{Lucas-Kanade method.}\label{fig:noise_lk}
     \end{subfigure}
     \caption{Optical flow estimation on rotated random noise.}\label{fig:noise}
 \end{figure}
-    
-\subsection{Additional image tests}
+
+We also tested the methods on other types of images. In figure~\ref{fig:translation} we can see that both
+methods work well for small shifts. They both show motion concentrated around
+object boundaries and textured regions. HS is visibly smoother than LK. In the next example, seen in figure~\ref{fig:translation_fail}
+LK estimates motion correctly only in the corners, where gradients exist in both spatial directions (for the rest they are 0). 
+Along the edges motion is partially recovered, but it is not reliable. HS produces a smooth flow field,
+but it's not accurate. It shows motion everywhere and in random directions in some cases. This most likely happens because
+the brightness constancy assumption is violated. 
+TODO 
+This is the result of the aperture problem, where motion can't be uniquely determined along edges. 
+
+The last example (figure~\ref{fig:collision_fail}) shows a non uniform motion due to perspective effects (the camera moving
+closer to the toy car). Both methods estimate flow correctly by showing motion away from the center.
+Again the difference is that HS produces a smoother flow field, while LK shows more details but also more noise. 
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{HS_translation1.png}
+        \caption{Horn-Shunck method.}\label{fig:translation_hs}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{LK_translation1.png}
+        \caption{Lucas-Kanade method.}\label{fig:translation_lk}
+    \end{subfigure}
+    \caption{Optical flow estimation on images after small shift to the right.}\label{fig:translation}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{HS_translationFAILCASE.png}
+        \caption{Horn-Shunck method.}\label{fig:translation_hs_fail}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{LK_translationFAILCASE.png}
+        \caption{Lucas-Kanade method.}\label{fig:translation_lk_fail}
+    \end{subfigure}
+    \caption{Optical flow estimation on square after shift by 1 pixel to the right.}\label{fig:translation_fail}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{HS_collission.png}
+        \caption{Horn-Shunck method.}\label{fig:collision_hs}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{LK_collission.png}
+        \caption{Lucas-Kanade method.}\label{fig:collision_lk}
+    \end{subfigure}
+    \caption{Optical flow estimation on collision images.}\label{fig:collision_fail}
+\end{figure}
 
 \subsection{Reliability of Lucas-Kanade}
 
 In LK flow is computed only where the structure tensor has strong eigen values. To detect this we 
-can use the Harris response detector. In figure TODO we can see that the unreliable flow vectors have been removed.
-But motion in corners has been preserved? This improves robustness by filtering out flow vectors that are most likely
-incorrect. 
+can use the Harris response detector. 
+In figure~\ref{fig:harris_comparison} we can see that motion in the corners has been preserved, while the motion 
+along the edges has been removed. This is because the motion is preserved only in regions where the gradients
+are strong in both directions. 
+
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{LK_translationFAILcase.png}
+        \caption{Lucas-Kanade method with harris detector.}\label{fig:harrisTrue}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{LK_translation_HarrisFalse.png}
+        \caption{Lucas-Kanade method without harris detector.}\label{fig:harrisFalse}
+    \end{subfigure}
+    \caption{Comparison of Lucas-Kanade with and without Harris detector.}\label{fig:harris_comparison}
+\end{figure}
 
 \subsection{Parameters analysis}
 
 The LK method has a window size parameter which controls the trade-off between noise and detail. Larger windows may
-over smooth and lose fine details, while smaller windows can be more sensitive to noise. There is also the gaussian smoothing sigma
-parameter which controls how much the image is smoothed before computing the flow. A larger sigma can help reduce noise but can also blur important features. 
-Lastly there is the harris threshold which if too high can discard good flow, while if too low can keep unreliable flow vectors.
-TODO show how the flow changes with different parameters.
+over smooth and lose fine details (as they average gradients over a larger region), while smaller windows can be more sensitive to noise. An example for 
+this can be seen in figure~\ref{fig:windowSize_comparison}.
+There is also the gaussian smoothing sigma parameter which controls how much the image is smoothed 
+before computing the flow. A larger sigma can help reduce noise but can also blur important features. 
+Lastly there is the harris threshold which if too high can discard good flow, while if too low can keep 
+unreliable flow vectors.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{lk_windowSize.png}
+        \caption{Lucas-Kanade method with window size 15.}\label{fig:windowSize}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{lk_windowSizeSmall.png}
+        \caption{Lucas-Kanade method with window size 3.}\label{fig:windowSizeSmall}
+    \end{subfigure}
+    \caption{Comparison of Lucas-Kanade with change in parameter.}\label{fig:windowSize_comparison}
+\end{figure}
 
 The HS method has the smoothness regularization parameter $\lambda$. It's a weighing factor which decides how much importance
 do we give to the brightness constancy constrain and how much to the smoothness constraint. A larger $\lambda$ will produce
-smoother flow fields, but can also lose details. On the other hand a smaller $\lambda$ can capture more details but 
-is more sensitive to noise. The HS method also has the number of iterations parameter which controls how many times
+smoother flow fields, but can also lose details (as it enforces stronger smoothness). 
+On the other hand a smaller $\lambda$ can capture more details but 
+is more sensitive to noise. This can be seen in figure~\ref{fig:lambda_comparison}. 
+The HS method also has the number of iterations parameter which controls how many times
 the flow is updated. More iterations leads to better convergence but also increases computational cost. 
-TODO show how the flow changes with different $\lambda$.
+
+TODO better image example
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{horn_smallLambda.png}
+        \caption{Horn-Schunck method with small $\lambda$.}\label{fig:smallLambda}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{horn_largeLambda.png}
+        \caption{Horn-Schunck method with large $\lambda$.}\label{fig:largeLambda}
+    \end{subfigure}
+    \caption{Comparison of Horn-Schunck with change in parameter.}\label{fig:lambda_comparison}
+\end{figure}
 
 
 \subsection{Runtime and initialization}
 The LK method is generally faster than HS since it computes flow only at certain points and uses a local window. The HS
 method uses iterative optimization which can be computationally expensive, especially for larger images. The runtime for both
-can be affected by the choice of parameters, such as window size for LK and number of iterations for HS.
-TODO time measurments for both methods in an array like table. Add initialization with LK output for HS and add
-another column for that. 
+can be affected by the choice of parameters, such as window size for LK and number of iterations for HS. We tested the
+runtime for both methods on image pairs from the lab2 dataset. The results are shown in table~\ref{tab:runtime}. We can
+see that LK is significantly faster than HS. However initializing HS with the output of LK can speed up convergence
+and reduce runtime. 
+
+\begin{table}[h]
+\centering
+\resizebox{0.5\textwidth}{!}{
+\begin{tabular}{|c|c|c|}
+    \hline
+    Method  & Average runtime (seconds)& Notes \\
+    \hline
+    Lucas-Kanade & 0.0131 & Fast, but can struggle with large displacements \\
+    Horn-Schunck & 3.4208 & Slower but more robust to noise \\
+    Horn-Schunck  with LK initialization &2.9123 & Faster convergence than HS alone \\
+    \hline
+\end{tabular}
+}
+\caption{Runtime comparison of optical flow methods}\label{tab:runtime}
+\end{table}
 
 \subsection{Pyramidal Lucas-Kanade}
+The pyramidal approach reduces large displacements by operating at a lower resolutions where motion appears smaller and then 
+adjusting the estimate back to higher resolutions.
 The standard LK method works well only for small motions. If an object moves fast, the small motion assumption is violated. A pyramidal
-implementation addressed this issue by created a pyramid of images at different scales. This can be seen in figure TODO. 
-Standard LK fails to capture the motion of the fast moving object, while the pyramidal implementation can capture it. 
+implementation addressed this issue by created a pyramid of images at different scales. In figure~\ref{fig:pyramidal_comparison} we can
+see how the standard LK fails to capture the motion of a fast moving object, while the pyramidal implementation
+is much more smooth and captures the motion much better. 
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{NOTpyramidal_.png}
+        \caption{Lucas-Kanade method.}\label{fig:notpyramidal}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth]{pyramidal_LK.png}
+        \caption{Pyramidal Lucas-Kanade method.}\label{fig:pyramidal}
+    \end{subfigure}
+    \caption{Comparison of Lucas-Kanade and Pyramidal Lucas-Kanade.}\label{fig:pyramidal_comparison}
+\end{figure}
 
 TODO
 Running LK multiple times at the same scale can help slightly but not drastically enough that it would be useful. It
 can refine small errors and improves convergence slightly, but it doesn't resolve the large displacement issue. 
-
-
-
-
 
 
 \section{Conclusion}

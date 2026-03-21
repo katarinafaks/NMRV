@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.3.15)  21 MAR 2026 15:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.3.15)  22 MAR 2026 00:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1133,74 +1133,192 @@ Package gensymb Info: Using text companion symbols for \degree, \celsius and \pe
 LaTeX Info: Redefining \ohm on input line 46.
 Package gensymb Info: Using \textohm for \ohm on input line 46.
 Package gensymb Info: Using \textmu for \micro on input line 46.
-<HS_randomNoise.png, id=40, 462.528pt x 346.896pt>
+<HS_randomNoise.png, id=36, 462.528pt x 346.896pt>
 File: HS_randomNoise.png Graphic file (type png)
 <use HS_randomNoise.png>
-Package pdftex.def Info: HS_randomNoise.png  used on input line 64.
-(pdftex.def)             Requested size: 103.19843pt x 77.39716pt.
-<LK_randomNoise.png, id=42, 462.528pt x 346.896pt>
+Package pdftex.def Info: HS_randomNoise.png  used on input line 66.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<LK_randomNoise.png, id=38, 462.528pt x 346.896pt>
 File: LK_randomNoise.png Graphic file (type png)
 <use LK_randomNoise.png>
-Package pdftex.def Info: LK_randomNoise.png  used on input line 69.
-(pdftex.def)             Requested size: 103.19843pt x 77.39716pt.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 92.
- (C:\Users\bostj\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
+Package pdftex.def Info: LK_randomNoise.png  used on input line 71.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<HS_translation1.png, id=42, 462.528pt x 346.896pt>
+File: HS_translation1.png Graphic file (type png)
+<use HS_translation1.png>
+Package pdftex.def Info: HS_translation1.png  used on input line 93.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<LK_translation1.png, id=43, 462.528pt x 346.896pt>
+File: LK_translation1.png Graphic file (type png)
+<use LK_translation1.png>
+Package pdftex.def Info: LK_translation1.png  used on input line 98.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<HS_translationFAILCASE.png, id=44, 462.528pt x 346.896pt>
+File: HS_translationFAILCASE.png Graphic file (type png)
+<use HS_translationFAILCASE.png>
+Package pdftex.def Info: HS_translationFAILCASE.png  used on input line 106.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<LK_translationFAILCASE.png, id=45, 462.528pt x 346.896pt>
+File: LK_translationFAILCASE.png Graphic file (type png)
+<use LK_translationFAILCASE.png>
+Package pdftex.def Info: LK_translationFAILCASE.png  used on input line 111.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<HS_collission.png, id=46, 462.528pt x 346.896pt>
+File: HS_collission.png Graphic file (type png)
+<use HS_collission.png>
+Package pdftex.def Info: HS_collission.png  used on input line 119.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<LK_collission.png, id=47, 462.528pt x 346.896pt>
+File: LK_collission.png Graphic file (type png)
+<use LK_collission.png>
+Package pdftex.def Info: LK_collission.png  used on input line 124.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<LK_translationFAILcase.png, id=49, 462.528pt x 346.896pt>
+File: LK_translationFAILcase.png Graphic file (type png)
+<use LK_translationFAILcase.png>
+Package pdftex.def Info: LK_translationFAILcase.png  used on input line 142.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<LK_translation_HarrisFalse.png, id=50, 462.528pt x 346.896pt>
+File: LK_translation_HarrisFalse.png Graphic file (type png)
+<use LK_translation_HarrisFalse.png>
+Package pdftex.def Info: LK_translation_HarrisFalse.png  used on input line 147.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 148--148
+[]\T1/lmr/m/n/8.5 (b) |Lucas-Kanade method
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<lk_windowSize.png, id=52, 462.528pt x 346.896pt>
+File: lk_windowSize.png Graphic file (type png)
+<use lk_windowSize.png>
+Package pdftex.def Info: lk_windowSize.png  used on input line 166.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<lk_windowSizeSmall.png, id=53, 462.528pt x 346.896pt>
+File: lk_windowSizeSmall.png Graphic file (type png)
+<use lk_windowSizeSmall.png>
+Package pdftex.def Info: lk_windowSizeSmall.png  used on input line 171.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 177.
+(C:\Users\bostj\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 92.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 177.
  (C:\Users\bostj\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 92.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 177.
  (C:\Users\bostj\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 92.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 177.
  (C:\Users\bostj\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 92.
+(Font)              <9> on input line 177.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 92.
+(Font)              <6> on input line 177.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 92.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 92.
+(Font)              <5> on input line 177.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 177.
  (C:\Users\bostj\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 92.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 177.
  (C:\Users\bostj\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 92.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 177.
  (C:\Users\bostj\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-No file main.bbl.
+<horn_smallLambda.png, id=55, 462.528pt x 346.896pt>
+File: horn_smallLambda.png Graphic file (type png)
+<use horn_smallLambda.png>
+Package pdftex.def Info: horn_smallLambda.png  used on input line 189.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 190.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8.5> on input line 190.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5.94997> on input line 190.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <4.25> on input line 190.
+<horn_largeLambda.png, id=56, 462.528pt x 346.896pt>
+File: horn_largeLambda.png Graphic file (type png)
+<use horn_largeLambda.png>
+Package pdftex.def Info: horn_largeLambda.png  used on input line 194.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 [1{C:/Users/bostj/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}
 
 
-{C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc} <./HS_randomNoise.png> <./LK_randomNoise.png>] (main.aux)
+{C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc} <./HS_randomNoise.png> <./LK_randomNoise.png> <./HS_translation1.png> <./LK_translation1.png> <./HS_translationFAILCASE.png> <./LK_translationFAILCASE.png>]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 221.
+
+Overfull \hbox (6.0127pt too wide) in paragraph at lines 211--222
+ [][] 
+ []
+
+<NOTpyramidal_.png, id=84, 462.528pt x 346.896pt>
+File: NOTpyramidal_.png Graphic file (type png)
+<use NOTpyramidal_.png>
+Package pdftex.def Info: NOTpyramidal_.png  used on input line 236.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+<pyramidal_LK.png, id=85, 462.528pt x 346.896pt>
+File: pyramidal_LK.png Graphic file (type png)
+<use pyramidal_LK.png>
+Package pdftex.def Info: pyramidal_LK.png  used on input line 241.
+(pdftex.def)             Requested size: 118.6778pt x 89.00514pt.
+
+Underfull \hbox (badness 2376) in paragraph at lines 242--242
+[]\T1/lmr/m/n/8.5 (b) |Pyra-mi-dal Lucas-Kanade
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+No file main.bbl.
+[2 <./HS_collission.png> <./LK_collission.png> <./LK_translationFAILcase.png> <./LK_translation_HarrisFalse.png> <./lk_windowSize.png> <./lk_windowSizeSmall.png> <./horn_smallLambda.png> <./horn_largeLambda.png> <./NOTpyramidal_.png> <./pyramidal_LK.png>] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 1468F77F155E6D2DFF5B82F1F1309472;1346.
+(rerunfilecheck)             Checksum: 1734F555D5C502C4F95CE8D5DF1DE78E;1262.
  ) 
 Here is how much of TeX's memory you used:
- 16458 strings out of 467867
- 267846 string characters out of 5418334
- 703015 words of memory out of 5000000
- 45056 multiletter control sequences out of 15000+600000
- 795222 words of font info for 133 fonts, out of 8000000 for 9000
+ 16638 strings out of 467867
+ 272032 string characters out of 5418334
+ 715314 words of memory out of 5000000
+ 45224 multiletter control sequences out of 15000+600000
+ 812730 words of font info for 157 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 69i,8n,79p,597b,523s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcsc10.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi9.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr17.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr7.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri9.pfb>
-Output written on main.pdf (1 page, 498591 bytes).
+ 69i,10n,79p,597b,598s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcsc10.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi9.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr17.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr7.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Users/bostj/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri9.pfb>
+Output written on main.pdf (2 pages, 2137682 bytes).
 PDF statistics:
- 94 PDF objects out of 1000 (max. 8388607)
- 12 named destinations out of 1000 (max. 500000)
- 83 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 145 PDF objects out of 1000 (max. 8388607)
+ 20 named destinations out of 1000 (max. 500000)
+ 145 words of extra memory for PDF output out of 10000 (max. 10000000)
 

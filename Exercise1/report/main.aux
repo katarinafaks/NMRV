@@ -4,12 +4,10 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\bibstyle{IEEEtran}
-\bibdata{bibliography}
 \babel@aux{english}{}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {II}Experiments}{1}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Rotated random noise}{1}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Testing on different types of images}{1}{subsection.2.1}\protected@file@percent }
 \newlabel{fig:noise_hs}{{1a}{1}{Horn-Shunck method}{figure.caption.1}{}}
 \newlabel{sub@fig:noise_hs}{{a}{1}{Horn-Shunck method}{figure.caption.1}{}}
 \newlabel{fig:noise_lk}{{1b}{1}{Lucas-Kanade method}{figure.caption.1}{}}
@@ -17,10 +15,55 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Optical flow estimation on rotated random noise.}}{1}{figure.caption.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:noise}{{1}{1}{Optical flow estimation on rotated random noise}{figure.caption.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Additional image tests}{1}{subsection.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Reliability of Lucas-Kanade}{1}{subsection.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Parameters analysis}{1}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-E}}Runtime and initialization}{1}{subsection.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-F}}Pyramidal Lucas-Kanade}{1}{subsection.2.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {III}Conclusion}{1}{section.3}\protected@file@percent }
-\gdef \@abspage@last{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Reliability of Lucas-Kanade}{1}{subsection.2.2}\protected@file@percent }
+\newlabel{fig:translation_hs}{{2a}{1}{Horn-Shunck method}{figure.caption.2}{}}
+\newlabel{sub@fig:translation_hs}{{a}{1}{Horn-Shunck method}{figure.caption.2}{}}
+\newlabel{fig:translation_lk}{{2b}{1}{Lucas-Kanade method}{figure.caption.2}{}}
+\newlabel{sub@fig:translation_lk}{{b}{1}{Lucas-Kanade method}{figure.caption.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Optical flow estimation on images after small shift to the right.}}{1}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:translation}{{2}{1}{Optical flow estimation on images after small shift to the right}{figure.caption.2}{}}
+\newlabel{fig:translation_hs_fail}{{3a}{1}{Horn-Shunck method}{figure.caption.3}{}}
+\newlabel{sub@fig:translation_hs_fail}{{a}{1}{Horn-Shunck method}{figure.caption.3}{}}
+\newlabel{fig:translation_lk_fail}{{3b}{1}{Lucas-Kanade method}{figure.caption.3}{}}
+\newlabel{sub@fig:translation_lk_fail}{{b}{1}{Lucas-Kanade method}{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Optical flow estimation on square after shift by 1 pixel to the right.}}{1}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:translation_fail}{{3}{1}{Optical flow estimation on square after shift by 1 pixel to the right}{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Parameters analysis}{1}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Runtime and initialization}{1}{subsection.2.4}\protected@file@percent }
+\bibstyle{IEEEtran}
+\bibdata{bibliography}
+\newlabel{fig:collision_hs}{{4a}{2}{Horn-Shunck method}{figure.caption.4}{}}
+\newlabel{sub@fig:collision_hs}{{a}{2}{Horn-Shunck method}{figure.caption.4}{}}
+\newlabel{fig:collision_lk}{{4b}{2}{Lucas-Kanade method}{figure.caption.4}{}}
+\newlabel{sub@fig:collision_lk}{{b}{2}{Lucas-Kanade method}{figure.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Optical flow estimation on collision images.}}{2}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:collision_fail}{{4}{2}{Optical flow estimation on collision images}{figure.caption.4}{}}
+\newlabel{fig:harrisTrue}{{5a}{2}{Lucas-Kanade method with harris detector}{figure.caption.5}{}}
+\newlabel{sub@fig:harrisTrue}{{a}{2}{Lucas-Kanade method with harris detector}{figure.caption.5}{}}
+\newlabel{fig:harrisFalse}{{5b}{2}{Lucas-Kanade method without harris detector}{figure.caption.5}{}}
+\newlabel{sub@fig:harrisFalse}{{b}{2}{Lucas-Kanade method without harris detector}{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Comparison of Lucas-Kanade with and without Harris detector.}}{2}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:harris_comparison}{{5}{2}{Comparison of Lucas-Kanade with and without Harris detector}{figure.caption.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Runtime comparison of optical flow methods}}{2}{table.caption.8}\protected@file@percent }
+\newlabel{tab:runtime}{{I}{2}{Runtime comparison of optical flow methods}{table.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-E}}Pyramidal Lucas-Kanade}{2}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Conclusion}{2}{section.3}\protected@file@percent }
+\newlabel{fig:windowSize}{{6a}{2}{Lucas-Kanade method with window size 15}{figure.caption.6}{}}
+\newlabel{sub@fig:windowSize}{{a}{2}{Lucas-Kanade method with window size 15}{figure.caption.6}{}}
+\newlabel{fig:windowSizeSmall}{{6b}{2}{Lucas-Kanade method with window size 3}{figure.caption.6}{}}
+\newlabel{sub@fig:windowSizeSmall}{{b}{2}{Lucas-Kanade method with window size 3}{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Comparison of Lucas-Kanade with change in parameter.}}{2}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:windowSize_comparison}{{6}{2}{Comparison of Lucas-Kanade with change in parameter}{figure.caption.6}{}}
+\newlabel{fig:smallLambda}{{7a}{2}{Horn-Schunck method with small $\lambda $}{figure.caption.7}{}}
+\newlabel{sub@fig:smallLambda}{{a}{2}{Horn-Schunck method with small $\lambda $}{figure.caption.7}{}}
+\newlabel{fig:largeLambda}{{7b}{2}{Horn-Schunck method with large $\lambda $}{figure.caption.7}{}}
+\newlabel{sub@fig:largeLambda}{{b}{2}{Horn-Schunck method with large $\lambda $}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Comparison of Horn-Schunck with change in parameter.}}{2}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:lambda_comparison}{{7}{2}{Comparison of Horn-Schunck with change in parameter}{figure.caption.7}{}}
+\newlabel{fig:notpyramidal}{{8a}{2}{Lucas-Kanade method}{figure.caption.9}{}}
+\newlabel{sub@fig:notpyramidal}{{a}{2}{Lucas-Kanade method}{figure.caption.9}{}}
+\newlabel{fig:pyramidal}{{8b}{2}{Pyramidal Lucas-Kanade method}{figure.caption.9}{}}
+\newlabel{sub@fig:pyramidal}{{b}{2}{Pyramidal Lucas-Kanade method}{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Comparison of Lucas-Kanade and Pyramidal Lucas-Kanade.}}{2}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:pyramidal_comparison}{{8}{2}{Comparison of Lucas-Kanade and Pyramidal Lucas-Kanade}{figure.caption.9}{}}
+\gdef \@abspage@last{2}

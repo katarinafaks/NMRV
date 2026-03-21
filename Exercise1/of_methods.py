@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 
 from ex1_utils import gaussderiv, gausssmooth, show_flow
 
-def lucas_kanade ( im1 , im2 , N ):
+def lucas_kanade ( im1 , im2 , N , harris = False):
     # im1 − first image matrix (grayscale)
     # im2 − second image matrix (grayscale)
     # n − size of the neighbourhood (N x N)
@@ -42,21 +42,22 @@ def lucas_kanade ( im1 , im2 , N ):
     D = I_x2 * I_y2 - (I_xy)**2    
 
     
-    #For reliability of LK, we use Harris response detector:
-    k = 0.04 #empirically determined constant (from WIKI: between 0.04 and 0.06)
-    trace = I_x2 + I_y2
-    R = D - k * trace**2
-    mask = R > 1e-5 # threshold for reliable flow, empirically determined
-    
     eps = 1e-6
     D[np.abs(D) < eps] = eps
     
     u = (-I_y2 * I_xt + I_xy * I_yt) / D
     v = (-I_x2 * I_yt + I_xy * I_xt) / D
     
-    # Apply reliability mask
-    u[~mask] = 0
-    v[~mask] = 0
+    if harris:
+        #For reliability of LK, we use Harris response detector:
+        k = 0.04 #empirically determined constant (from WIKI: between 0.04 and 0.06)
+        trace = I_x2 + I_y2
+        R = D - k * trace**2
+        mask = R > 1e-5 # threshold for reliable flow, empirically determined
+        
+        # Apply reliability mask
+        u[~mask] = 0
+        v[~mask] = 0
     
     return u,v 
 
@@ -91,7 +92,7 @@ def pyramidal_lk(im1, im2, N, num_levels = 3, scale = 0.5):
         im2_warped = cv2.remap(im2_lvl, map_x, map_y, interpolation=cv2.INTER_LINEAR)
         
         #compute flow at curr level
-        du, dv = lucas_kanade(im1_lvl, im2_warped, N)
+        du, dv = lucas_kanade(im1_lvl, im2_warped, N,harris=True)
         
         #update flow:
         u += du
@@ -145,111 +146,12 @@ def horn_schunck ( im1 , im2 , n_iters , lmbd , lk_init = False):
 
 
 
-
-
-def plot_flow_both_func(im1,im2):
-    U_lk, V_lk = lucas_kanade(im1, im2, 3)
-    U_hs, V_hs = horn_schunck(im1, im2, 1000, 0.5)
-    fig1, ((ax1_11, ax1_12), (ax1_21, ax1_22)) = plt.subplots(2, 2)
-    ax1_11.imshow(im1, cmap='gray')
-    ax1_12.imshow(im2, cmap='gray')
-    show_flow(U_lk, V_lk, ax1_21, type='angle')
-    show_flow(U_lk, V_lk, ax1_22, type='field', set_aspect=True)
-    fig1.suptitle('Lucas-Kanade Optical Flow')
-    fig2, ((ax2_11, ax2_12), (ax2_21, ax2_22)) = plt.subplots(2, 2)
-    ax2_11.imshow(im1, cmap='gray')
-    ax2_12.imshow(im2, cmap='gray')
-    show_flow(U_hs, V_hs, ax2_21, type='angle')
-    show_flow(U_hs, V_hs, ax2_22, type='field', set_aspect=True)
-    fig2.suptitle('Horn-Schunck Optical Flow')
-    plt.show()
-
-
-def time_comparison(im1, im2):
-    start_time = time.time()
-    lucas_kanade(im1, im2, 3)
-    lk_time = time.time() - start_time
-    
-    start_time = time.time()
-    horn_schunck(im1, im2, 1000, 0.5)
-    hs_time = time.time() - start_time
-    
-    start_time = time.time()
-    horn_schunck(im1, im2, 1000, 0.5, lk_init=True)
-    hs_time_lk = time.time() - start_time
-    
-    print(f"Lucas-Kanade time: {lk_time:.4f} seconds")
-    print(f"Horn-Schunck time: {hs_time:.4f} seconds")
-    print(f"Horn-Schunck time with LK initialization: {hs_time_lk:.4f} seconds")
-
 if __name__ == "__main__":
-    # print("Lucas-Kanade Algorithm")
-    # input tests for Lucas-Kanade
+    print("Implementation of methods. Tests in test_methods.py")
     # im1 = cv2.imread('disparity/office_left.png', cv2.IMREAD_GRAYSCALE).astype(np.float32) #/ 255.0
     # im2 = cv2.imread('disparity/office_right.png', cv2.IMREAD_GRAYSCALE).astype(np.float32) #/ 255.0
-    # plot_flow_both_func(im1,im2)
-
-    # im1 = cv2.imread('collision/00000001.jpg', cv2.IMREAD_GRAYSCALE).astype(np.float32) #/ 255.0
-    # im2 = cv2.imread('collision/00000005.jpg', cv2.IMREAD_GRAYSCALE).astype(np.float32) #/ 255.0
-    # plot_flow_both_func(im1,im2)
     
-    im1 = cv2.imread('lab2/001.jpg', cv2.IMREAD_GRAYSCALE).astype(np.float32) #/ 255.0
-    im2 = cv2.imread('lab2/004.jpg', cv2.IMREAD_GRAYSCALE).astype(np.float32) #/ 255.0
-    # plot_flow_both_func(im1,im2)
 
-
-
-    im1 = np.zeros((100,100), np.float32)
-    im1[30:70,30:70] = 1
-
-    im2 = np.roll(im1, shift=15, axis=1)  # large motion
-    
-    u_lk, v_lk = lucas_kanade(im1, im2, 5)
-    u_pyr, v_pyr = pyramidal_lk(im1, im2, 5, num_levels=4, scale=0.5)
-    
-    
-    fig1, ((ax1_11, ax1_12), (ax1_21, ax1_22)) = plt.subplots(2, 2)
-    ax1_11.imshow(im1, cmap='gray')
-    ax1_12.imshow(im2, cmap='gray')
-    show_flow(u_lk, v_lk, ax1_21, type='angle')
-    show_flow(u_lk, v_lk, ax1_22, type='field', set_aspect=True)
-    fig1.suptitle('Lucas-Kanade Optical Flow')
-    plt.show()
-
-
-    fig1, ((ax1_11, ax1_12), (ax1_21, ax1_22)) = plt.subplots(2, 2)
-    ax1_11.imshow(im1, cmap='gray')
-    ax1_12.imshow(im2, cmap='gray')
-    show_flow(u_pyr, v_pyr, ax1_21, type='angle')
-    show_flow(u_pyr, v_pyr, ax1_22, type='field', set_aspect=True)
-    fig1.suptitle('Pyramidal Lucas-Kanade Optical Flow')
-    plt.show()
-
-    # time_comparison(im1, im2)
-    # u,v = pyramidal_lk(im1, im2, 3, num_levels=4, scale=0.5)
-    
-    # fig1, ((ax1_11, ax1_12), (ax1_21, ax1_22)) = plt.subplots(2, 2)
-    # ax1_11.imshow(im1, cmap='gray')
-    # ax1_12.imshow(im2, cmap='gray')
-    # show_flow(u, v, ax1_21, type='angle')
-    # show_flow(u, v, ax1_22, type='field', set_aspect=True)
-    # fig1.suptitle('Pyramidal Lucas-Kanade Optical Flow')
-    # plt.show()
-
-
-    # u,v = lucas_kanade(im1, im2, 3)
-    # fig1, ((ax1_11, ax1_12), (ax1_21, ax1_22)) = plt.subplots(2, 2)
-    # ax1_11.imshow(im1, cmap='gray')
-    # ax1_12.imshow(im2, cmap='gray')
-    # show_flow(u, v, ax1_21, type='angle')
-    # show_flow(u, v, ax1_22, type='field', set_aspect=True)
-    # fig1.suptitle('Lucas-Kanade Optical Flow')
-    # plt.show()
-
-    # print("Horn-Schunck Algorithm")
-    # input tests for Horn-Schunck
-    
-    
     
     
     
