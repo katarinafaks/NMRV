@@ -17,10 +17,6 @@ def lucas_kanade ( im1 , im2 , N , harris = False):
     # that contain "u" and "v" components of the optical flow
     # displacement vectors
 
-    
-    # DELETE ME AFTER TESTS IF NOT NEEDED:
-    # im1 = im1.astype(np.float32) / 255.0
-    # im2 = im2.astype(np.float32) / 255.0
 
     #Need: spatial derivatives (Ix, Iy) and temporal derivative (It)
     It = gausssmooth(im2 - im1,1) # temporal derivative
@@ -70,11 +66,11 @@ def pyramidal_lk(im1, im2, N, num_levels = 3, scale = 0.5):
     for _ in range(1,num_levels):
         pyramid1.append(cv2.resize(pyramid1[-1], None, fx = scale, fy = scale))
         pyramid2.append(cv2.resize(pyramid2[-1],None, fx = scale, fy = scale))
-        #cv2.pyrDown <- alternative, test
     
     u = np.zeros_like(pyramid1[-1], dtype=np.float32)
     v = np.zeros_like(pyramid1[-1], dtype=np.float32)
     
+    #from smallest to largest image
     for lvl in reversed(range(num_levels)):
         im1_lvl = pyramid1[lvl]
         im2_lvl = pyramid2[lvl]
@@ -100,7 +96,7 @@ def pyramidal_lk(im1, im2, N, num_levels = 3, scale = 0.5):
     return u, v
     
 
-def horn_schunck ( im1 , im2 , n_iters , lmbd , lk_init = False):
+def horn_schunck ( im1 , im2 , n_iters , lmbd , lk_init = False, runtime_test = False):
     # im1 − first image matrix (grayscale)
     # im2 − second image matrix (grayscale)
     # n_iters − number of iterations (try several hundred)
@@ -125,22 +121,34 @@ def horn_schunck ( im1 , im2 , n_iters , lmbd , lk_init = False):
                                 [1/4, 0, 1/4],
                                 [0, 1/4, 0]], dtype=np.float32)
     
+    error_at_iter = []
+    
+    # outside loop cause dooesn't change during iters
+    D = lmbd + Ix**2 + Iy**2
+    eps = 1e-6
+    D[np.abs(D) < eps] = eps
+    
     for i in range(n_iters):
         # averages of u and v
         u_a = cv2.filter2D(u, -1, kernel_average)
         v_a = cv2.filter2D(v, -1, kernel_average)
         
         P = Ix * u_a + Iy * v_a + It
-        D = lmbd + Ix**2 + Iy**2
         
-        eps = 1e-6
-        D[np.abs(D) < eps] = eps
     
-        
+        if runtime_test:
+            # error: E_data + \lambda * E_smooth
+            e_data = np.sum((Ix * u + Iy * v + It)**2)
+            e_smooth = np.sum((u - u_a)**2 + (v - v_a)**2)
+            error_at_iter.append(e_data + lmbd * e_smooth)
+            
         # Iterative step
         u = u_a - Ix * P / D
         v = v_a - Iy * P / D
+    
         
+    if runtime_test:
+        return u, v, error_at_iter
 
     return u, v
 
