@@ -9,7 +9,7 @@ from ms_tracker import MeanShiftTracker, MSParams
 
 # set the path to directory where you have the sequences
 dataset_path = 'vot14' # TODO: set to the dataset path on your disk
-sequence = 'basketball'  # choose the sequence you want to test
+sequence = 'car'  # choose the sequence you want to test
 
 # visualization and setup parameters
 win_name = 'Tracking window'
@@ -69,6 +69,7 @@ while frame_idx < sequence.length():
         frame_idx += 5
         init_frame = frame_idx
         n_failures += 1
+        
 
 print('Tracking speed: %.1f FPS' % (sequence.length() / time_all))
 print('Tracker failed %d times' % n_failures)
