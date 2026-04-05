@@ -6,15 +6,16 @@ from sequence_utils import VOTSequence
 from ncc_tracker_example import NCCTracker, NCCParams
 from ms_tracker import MeanShiftTracker, MSParams
 
-
+avg_o = []
+avg_o_full = []
 # set the path to directory where you have the sequences
 dataset_path = 'vot14' # TODO: set to the dataset path on your disk
-sequence = 'car'  # choose the sequence you want to test
+sequence = 'sunshade'  # choose the sequence you want to test
 
 # visualization and setup parameters
 win_name = 'Tracking window'
 reinitialize = True
-show_gt = False
+show_gt = True
 video_delay = 15
 font = cv2.FONT_HERSHEY_PLAIN
 
@@ -52,6 +53,8 @@ while frame_idx < sequence.length():
     # calculate overlap (needed to determine failure of a tracker)
     gt_bb = sequence.get_annotation(frame_idx, type='rectangle')
     o = sequence.overlap(predicted_bbox, gt_bb)
+    avg_o.append(o)
+    avg_o_full.append(o)
 
     # draw ground-truth and predicted bounding boxes, frame numbers and show image
     if show_gt:
@@ -64,12 +67,32 @@ while frame_idx < sequence.length():
     if o > 0 or not reinitialize:
         # increase frame counter by 1
         frame_idx += 1
+        
     else:
+        # fail_img = img.copy()
+        # sequence.draw_region(fail_img, gt_bb, (0, 255, 0), 2)
+        # sequence.draw_region(fail_img, predicted_bbox, (0, 0, 255), 2)
+        
+        # filename = f"report/figures/failure_car_frame{frame_idx}.jpg"
+        # cv2.imwrite(filename, fail_img)
+        # print(f"Saved failure image to {filename}")
+        # cv2.imshow('Failure analysis', fail_img)
+        # cv2.waitKey(0)
+        # print('Overlap at this frame: %.3f' % o)
+        print('Average overlap until failure: %.3f' % (sum(avg_o) / len(avg_o)))
+        
         # increase frame counter by 5 and set re-initialization to the next frame
         frame_idx += 5
         init_frame = frame_idx
         n_failures += 1
         
+        avg_o = []
+        
 
 print('Tracking speed: %.1f FPS' % (sequence.length() / time_all))
 print('Tracker failed %d times' % n_failures)
+if avg_o:
+    print('Average overlap: %.3f' % (sum(avg_o) / len(avg_o))) 
+if avg_o_full:
+    print('Average overlap (full sequence): %.3f' % (sum(avg_o_full) / len(avg_o_full))) 
+

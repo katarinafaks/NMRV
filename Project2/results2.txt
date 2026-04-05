@@ -1,0 +1,26 @@
+Number of iterations: 1, Tracker failed 3 times
+Average overlap (full sequence): 0.431
+Number of iterations: 2, Tracker failed 3 times
+Average overlap (full sequence): 0.482
+Number of iterations: 5, Tracker failed 0 times
+Average overlap (full sequence): 0.413
+Number of iterations: 10, Tracker failed 1 times
+Average overlap (full sequence): 0.555
+Number of iterations: 20, Tracker failed 1 times
+Average overlap (full sequence): 0.454
+Number of iterations: 30, Tracker failed 1 times
+Average overlap (full sequence): 0.455
+Number of iterations: 40, Tracker failed 0 times
+Average overlap (full sequence): 0.441
+Number of iterations: 50, Tracker failed 1 times
+Average overlap (full sequence): 0.564
+Number of iterations: 60, Tracker failed 0 times
+Average overlap (full sequence): 0.549
+Number of iterations: 70, Tracker failed 0 times
+Average overlap (full sequence): 0.549
+Number of iterations: 80, Tracker failed 0 times
+Average overlap (full sequence): 0.548
+Number of iterations: 90, Tracker failed 0 times
+Average overlap (full sequence): 0.548
+Number of iterations: 100, Tracker failed 0 times
+Average overlap (full sequence): 0.550

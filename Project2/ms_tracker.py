@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from ex2_utils import generate_responses_1, extract_histogram, backproject_histogram,get_patch,create_epanechnik_kernel,Tracker
-from ms_mode import mean_shift_step, mean_shift
+from ex2_utils import extract_histogram, backproject_histogram,get_patch,create_epanechnik_kernel,Tracker
+
 
 #add gaussian kernel for mean-shift test
 def create_gaussian_kernel(width, height, sigma):
@@ -15,21 +15,114 @@ def create_gaussian_kernel(width, height, sigma):
     return kernel
     
 
+def plot():
+    number_bins = [4,8,16,32,64]
+    fps = [397.6,325.5, 911.7,447.8,33.5]
+    failures = [0,1,2,3,15]
+    #until first failure
+    avg_overlap = [0.6,0.559, 0.567,0.390,0.239]
+    # full seq (which gets reset to ground truth after failure!)
+    avg_overlap_full = [0.6,0.667, 0.638, 0.464, 0.321]
+    
+    fig, ax1 = plt.subplots(figsize=(8, 5))
+    ax1.bar(number_bins, failures, color='lightblue')
+    ax1.set_xlabel('Number of bins')
+    ax1.set_ylabel('Number of failures', color='blue')
+    ax1.tick_params(axis='y', labelcolor='blue')
+    for i, v in enumerate(failures):
+        ax1.text(number_bins[i], v + 0.5, str(v), color='blue', ha='center')
+    ax2 = ax1.twinx()
+    # ax2.plot(number_bins, avg_overlap, color='red', marker='o', label='Average overlap until first failure')
+    ax2.plot(number_bins, avg_overlap_full, color='orange', marker='o',
+                label='Average overlap over full sequence')
+    ax2.set_ylabel('Average overlap', color='red')
+    ax2.tick_params(axis='y', labelcolor='red')
+    ax2.set_ylim(0, 1)
+    ax1.set_ylim(0,16)
+    plt.xticks(number_bins)
+    plt.title('Number of bins vs failures and average overlap')
+    fig.legend(loc='upper right', bbox_to_anchor=(0.5,1), bbox_transform=ax1.transAxes)
+    plt.show()
+
+# plot()
+    
+def plot2():
+    # #sphere, 16 bins
+    alphas = []
+    avg_overlaps = []
+    with open('results.txt', 'r') as f:
+        lines = f.readlines()
+        for i in range(0, len(lines), 2):
+            alpha = float(lines[i].split(':')[1].strip())
+            avg_overlap = float(lines[i+1].split(':')[1].strip())
+            alphas.append(alpha)
+            avg_overlaps.append(avg_overlap)
+    
+    plt.figure(figsize=(7, 5))
+    plt.plot(alphas, avg_overlaps, color='orange', marker='o')
+    plt.xlabel('Alpha')
+    plt.ylabel('Average overlap')
+    plt.title('Alpha vs average overlap')
+    plt.ylim(0, 1)
+    plt.show()
+# plot2()
+
+def plot3():
+    # motocross, 8 bins, alpha = 0.01, size = 41x41
+    iterations = []
+    failures = []
+    avg_overlaps = []
+    with open('results2.txt', 'r') as f:
+        lines = f.readlines()
+        for i in range(0, len(lines), 2):
+            iter_line = lines[i]
+            avg_line = lines[i+1]
+            # Extract number of iterations and failures
+            iter_num = int(iter_line.split(',')[0].split(':')[1].strip())
+            fail_num = int(iter_line.split(',')[1].split('Tracker failed')[1].split('times')[0].strip())
+            avg_overlap = float(avg_line.split(':')[1].strip())
+            iterations.append(iter_num)
+            failures.append(fail_num)
+            avg_overlaps.append(avg_overlap)
+
+    fig, ax1 = plt.subplots(figsize=(8, 5))
+    # Bar chart for failures
+    bars = ax1.bar(iterations, failures, color='lightblue', label='Number of failures')
+
+    ax1.set_xlabel('Number of iterations')
+    ax1.set_ylabel('Number of failures', color='blue')
+    ax1.tick_params(axis='y', labelcolor='blue')
+    ax1.set_ylim(0, max(failures) + 2)
+    ax1.set_xticks(iterations)
+    # Add value labels above bars
+    for bar, v in zip(bars, failures):
+        ax1.text(bar.get_x() + bar.get_width() / 2, v + 0.1, str(v), color='blue', ha='center')
+
+    # Line plot for average overlap
+    ax2 = ax1.twinx()
+    ax2.plot(iterations, avg_overlaps, color='orange', marker='o', label='Average overlap')
+    ax2.set_ylabel('Average overlap', color='red')
+    ax2.tick_params(axis='y', labelcolor='red')
+    ax2.set_ylim(0, 1)
+
+    plt.title('Iterations vs failures and average overlap')
+    fig.legend(loc='upper right', bbox_to_anchor=(0.5,1), bbox_transform=ax1.transAxes)
+    plt.show()
+# plot3()
 
 class MSParams():
     def __init__(self):
         self.kernel_type = 'epanechnikov' # 'epanechnikov', 'gaussian'
         self.sigma = 1 # for the kernel
-        self.num_bins = 8
+        self.num_bins = 16
         self.eps = 1e-3 #epsilon for weighted histogram update (avoid division by zero)
-        self.max_iters = 20
-        self.tol = 0.5#5e-1 #0.5 <- adjust
-        self.alpha = 0.5 # for histogram update
+        self.max_iters = 100
+        self.tol = 1e-5 #0.5 <- adjust
+        self.alpha = 0.01 # for histogram update
         # for kernel and patch:
-        self.width = 21 
-        self.height = 21
-
-
+        self.width = 41 
+        self.height = 41
+    
 class MeanShiftTracker(Tracker):
     
     def initialize(self,image,region):
@@ -49,6 +142,7 @@ class MeanShiftTracker(Tracker):
         self.center = (region[0] + region[2]/2.0, region[1] + region[3]/2.0)
         self.window = region
         
+        # cv2.cvtColor(image, cv2.COLOR_BGR2HSV, image) # convert to HSV for histogram extraction
         
         patch,_ = get_patch(image, self.center, (self.parameters.width, self.parameters.height))
         
@@ -83,7 +177,9 @@ class MeanShiftTracker(Tracker):
         # w_i = backprojection within extracted patch using weights v = \sqrt(q /(p + eps)) and then
         # new position using mean-shift equation. 
         # Update model using: q_new = (1-alpha)*q_old + alpha*q_, where q_ is the histogram using kernel
-
+        
+        
+        # cv2.cvtColor(image, cv2.COLOR_BGR2HSV, image)
 
         x_upd = self.center[0]
         y_upd = self.center[1]
@@ -132,11 +228,13 @@ class MeanShiftTracker(Tracker):
         hist = extract_histogram(patch = patch, nbins = self.parameters.num_bins, weights=self.kernel)
         hist = hist / np.sum(hist)
         self.q =(1 - self.parameters.alpha)*self.q + self.parameters.alpha*hist # need to normalize histogram after update?
-        self.q = self.q / np.sum(self.q) # <- needed or no???
+        self.q = self.q / np.sum(self.q) 
         
         return self.window
             
-        
+if __name__ == "__main__":
+    print("ms_tracker.py file - not meant to be run directly")
     
-        
-            
+    
+    
+    

@@ -1,6 +1,5 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from ex2_utils import generate_responses_1, extract_histogram, backproject_histogram,Tracker
 from ex1_utils import gausssmooth
 
 
@@ -11,10 +10,7 @@ from ex1_utils import gausssmooth
 
 def mean_shift_step(start_pos, h, data, kernel_shape='square', sanity_check = False):
     """    
-    First implementation just for epanechnikov kernel, but should extend to other kernels as well.
-    That's when the g should come in 
-    
-    g ... - gradient of the kernel function ? <- include?
+    kernel_shape ... 'square', 'circle', 'gaussian' (square == epanechnikov, circle == uniform circular, gaussian == gaussian kernel)    
     h ... kernel_size (bandwidth)
     data ... 2D array of data values (e.g. probability density)
     start_pos ... starting position for mean shift (2D coordinates)
@@ -62,7 +58,6 @@ def mean_shift_step(start_pos, h, data, kernel_shape='square', sanity_check = Fa
         plt.legend()
         plt.show()
     
-    
     return np.array([new_x, new_y])
         
     
@@ -74,19 +69,19 @@ def mean_shift(start_pos, h, data, max_iters=100, tol=1e-3,sanity_check = False,
     x = start_pos
     for i in range(max_iters):
         new_x = mean_shift_step(x, h, data,kernel_shape=kernel_shape,sanity_check=False)
-        shift_distance = np.linalg.norm(new_x - x)
+        shift_distance = np.linalg.norm(new_x - x) # distance between new and old position ("number of pixels shifted kinda")
         
         if shift_distance < tol:
             if sanity_check:
                 save_x.append(new_x)
-                # print(f"Converged after {i+1} iterations with shift distance {shift_distance:.10f}.")
-                plt.figure(figsize=(10, 5))
-                plt.imshow(data)
-                plt.scatter([pos[0] for pos in save_x[:-1]], [pos[1] for pos in save_x[:-1]], color='black', marker='x', label='Mean Shift Path')
-                plt.scatter(save_x[-1][0], save_x[-1][1], color='red', marker='x', label='Final Position')
-                plt.title(f'Mean Shift Convergence after {i+1} iterations')
-                plt.legend()
-                plt.show()
+                print(f"Converged after {i+1} iterations with shift distance {shift_distance:.10f}.")
+                # plt.figure(figsize=(10, 5))
+                # plt.imshow(data)
+                # plt.scatter([pos[0] for pos in save_x[:-1]], [pos[1] for pos in save_x[:-1]], color='black', marker='x', label='Mean Shift Path')
+                # plt.scatter(save_x[-1][0], save_x[-1][1], color='red', marker='x', label='Final Position')
+                # plt.title(f'Mean Shift Convergence after {i+1} iterations')
+                # plt.legend()
+                # plt.show()
             break
         
         if relax_factor > 1:            
@@ -119,12 +114,15 @@ def generate_responses_2():
     """
     responses = np.zeros((100, 100), dtype=np.float32)
     responses[30, 30] = 1
-    responses[70, 70] = 1 # a bit smaller but still distinct
+    responses[70, 70] = 1 
     
     responses = gausssmooth(responses, 8) # smooth the responses to make them more realistic
     return responses
 
 def generate_response_curve():
+    """
+    Generate a 2D array with a single peak that has a more complex shape (not circular).
+    """
     responses = np.zeros((100, 100), dtype=np.float32)
     x_coords = np.linspace(20,80,100)
     y_coords = 45 + 0.02*(x_coords-50)**2
@@ -179,12 +177,34 @@ def for_report_plot3(savex1,savex2,savex3,data):
     plt.legend()
     plt.show()
 
+def for_report_plot4(savex, data):
+    plt.figure(figsize=(5, 5))
+    plt.imshow(data)
+    length = len(savex)
+    
+    tolerances = [2,1,0.5,0.1,0.01]
+    path = savex[-1]
+    plt.scatter([pos[0] for pos in path], [pos[1] for pos in path], color='black', marker='x', label='Mean Shift Path')
+    for path,tol in zip(savex, tolerances):
+        plt.scatter(path[-1][0], path[-1][1], marker='x', label='Final Position tol=%.2f'%tol)
+    
+    plt.title('Mean Shift Convergence with Different termination criteria')
+    plt.legend()
+    plt.show()
 
 if __name__ == "__main__":
     temp = generate_response_curve()
     print("Testing mean shift on a response curve...")
-    x, save_x = mean_shift(np.array([54,70]), 5, temp, max_iters=100, tol=1e-7,sanity_check=True, kernel_shape='square')
+    tolerances = [2,1,0.5,0.1,0.01]
+    save = []
+    for tol in tolerances:
+        x, save_x = mean_shift(np.array([43,65]), 3, temp, max_iters=100, tol=tol,sanity_check=True, kernel_shape='gaussian') 
+        print(f"Tolerance: {tol}, iterations: {len(save_x)}")
+        save.append(save_x)
     
+    for_report_plot4(save, temp)
+    # x, save_x = mean_shift(np.array([43,65]), 5, temp, max_iters=100, tol=0.1,sanity_check=True, kernel_shape='gaussian')
+
     
     # temp = generate_responses_1()
     # print("Testing mean shift on with different relax factors...")

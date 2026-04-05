@@ -1,0 +1,36 @@
+Alpha values: 0.0
+Average overlap (full sequence): 0.360
+Alpha values: 0.05263158
+Average overlap (full sequence): 0.441
+Alpha values: 0.10526316
+Average overlap (full sequence): 0.453
+Alpha values: 0.15789474
+Average overlap (full sequence): 0.479
+Alpha values: 0.21052632
+Average overlap (full sequence): 0.482
+Alpha values: 0.26315789
+Average overlap (full sequence): 0.485
+Alpha values: 0.31578947
+Average overlap (full sequence): 0.638
+Alpha values: 0.36842105
+Average overlap (full sequence): 0.650
+Alpha values: 0.42105263
+Average overlap (full sequence): 0.657
+Alpha values: 0.52631579
+Average overlap (full sequence): 0.657
+Alpha values: 0.57894737
+Average overlap (full sequence): 0.657
+Alpha values: 0.63157895
+Average overlap (full sequence): 0.664
+Alpha values: 0.68421053
+Average overlap (full sequence): 0.667
+Alpha values: 0.73684211
+Average overlap (full sequence): 0.667
+Alpha values: 0.78947368
+Average overlap (full sequence): 0.668
+Alpha values: 0.84210526
+Average overlap (full sequence): 0.668
+Alpha values: 0.89473684
+Average overlap (full sequence): 0.665
+Alpha values: 0.94736842
+Average overlap (full sequence): 0.664
