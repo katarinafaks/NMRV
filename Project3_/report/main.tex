@@ -1,0 +1,73 @@
+\documentclass[9pt]{IEEEtran}
+
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{array}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{float}
+\usepackage{gensymb}
+\usepackage{longtable}
+\usepackage{supertabular}
+\usepackage{multicol}
+
+\usepackage[utf8x]{inputenc}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\input{glyphtounicode}
+\pdfgentounicode=1
+
+\graphicspath{{./figures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.eps}
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor trig-gs}
+
+% ============================================================================================
+
+\title{\vspace{0ex}
+Exercise 3: Correlation filter tracking}
+
+\author{Katarina Brešar\vspace{-4.0ex}}
+
+% ============================================================================================
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+In this assignment we implemented a correlation filter tracker and evaluated its performance on the VOT2014 dataset.
+The tracker operates by learning a filter in the Fourier domain that produces a Gaussian peak response at the
+target's location. The filter is then updated over time using a learning rate to adapt to changes in the target's appearance and 
+location. We then evaluated the tracker's performance using VOT-lite toolkit that uses standard performance measures
+accuracy and robustness.
+
+\section{Experiments}
+The tracker was implemented using a simplified MOSS approach. 
+
+\subsection{Analysis of parameters}
+
+\subsection{Larger patch}
+
+\subsection{Tracking speed}
+
+\section{Conclusion}
+
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography}
+
+\end{document}
