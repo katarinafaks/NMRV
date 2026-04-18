@@ -1,0 +1,150 @@
+Alpha: 0.01, Sigma: 2, Lambda: 0.01
+Tracking speed: 261.2 FPS
+Tracker failed 7 times
+Average overlap (full sequence): 0.620
+
+Alpha: 0.0406896551724138, Sigma: 2, Lambda: 0.01
+Tracking speed: 267.6 FPS
+Tracker failed 4 times
+Average overlap (full sequence): 0.581
+
+Alpha: 0.07137931034482758, Sigma: 2, Lambda: 0.01
+Tracking speed: 373.3 FPS
+Tracker failed 2 times
+Average overlap (full sequence): 0.585
+
+Alpha: 0.10206896551724139, Sigma: 2, Lambda: 0.01
+Tracking speed: 354.3 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.574
+
+Alpha: 0.1327586206896552, Sigma: 2, Lambda: 0.01
+Tracking speed: 295.3 FPS
+Tracker failed 4 times
+Average overlap (full sequence): 0.571
+
+Alpha: 0.16344827586206898, Sigma: 2, Lambda: 0.01
+Tracking speed: 392.5 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.559
+
+Alpha: 0.1941379310344828, Sigma: 2, Lambda: 0.01
+Tracking speed: 368.8 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.549
+
+Alpha: 0.22482758620689658, Sigma: 2, Lambda: 0.01
+Tracking speed: 208.2 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.550
+
+Alpha: 0.25551724137931037, Sigma: 2, Lambda: 0.01
+Tracking speed: 186.6 FPS
+Tracker failed 4 times
+Average overlap (full sequence): 0.557
+
+Alpha: 0.28620689655172415, Sigma: 2, Lambda: 0.01
+Tracking speed: 189.5 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.563
+
+Alpha: 0.31689655172413794, Sigma: 2, Lambda: 0.01
+Tracking speed: 145.5 FPS
+Tracker failed 4 times
+Average overlap (full sequence): 0.567
+
+Alpha: 0.34758620689655173, Sigma: 2, Lambda: 0.01
+Tracking speed: 206.9 FPS
+Tracker failed 1 times
+Average overlap (full sequence): 0.572
+
+Alpha: 0.3782758620689656, Sigma: 2, Lambda: 0.01
+Tracking speed: 162.4 FPS
+Tracker failed 1 times
+Average overlap (full sequence): 0.565
+
+Alpha: 0.40896551724137936, Sigma: 2, Lambda: 0.01
+Tracking speed: 215.6 FPS
+Tracker failed 0 times
+Average overlap (full sequence): 0.568
+
+Alpha: 0.43965517241379315, Sigma: 2, Lambda: 0.01
+Tracking speed: 201.2 FPS
+Tracker failed 4 times
+Average overlap (full sequence): 0.571
+
+Alpha: 0.47034482758620694, Sigma: 2, Lambda: 0.01
+Tracking speed: 214.2 FPS
+Tracker failed 4 times
+Average overlap (full sequence): 0.575
+
+Alpha: 0.5010344827586207, Sigma: 2, Lambda: 0.01
+Tracking speed: 214.2 FPS
+Tracker failed 4 times
+Average overlap (full sequence): 0.578
+
+Alpha: 0.5317241379310346, Sigma: 2, Lambda: 0.01
+Tracking speed: 238.4 FPS
+Tracker failed 4 times
+Average overlap (full sequence): 0.579
+
+Alpha: 0.5624137931034483, Sigma: 2, Lambda: 0.01
+Tracking speed: 234.8 FPS
+Tracker failed 2 times
+Average overlap (full sequence): 0.581
+
+Alpha: 0.5931034482758621, Sigma: 2, Lambda: 0.01
+Tracking speed: 193.0 FPS
+Tracker failed 2 times
+Average overlap (full sequence): 0.580
+
+Alpha: 0.6237931034482759, Sigma: 2, Lambda: 0.01
+Tracking speed: 205.7 FPS
+Tracker failed 2 times
+Average overlap (full sequence): 0.581
+
+Alpha: 0.6544827586206897, Sigma: 2, Lambda: 0.01
+Tracking speed: 365.0 FPS
+Tracker failed 2 times
+Average overlap (full sequence): 0.581
+
+Alpha: 0.6851724137931035, Sigma: 2, Lambda: 0.01
+Tracking speed: 245.1 FPS
+Tracker failed 2 times
+Average overlap (full sequence): 0.581
+
+Alpha: 0.7158620689655173, Sigma: 2, Lambda: 0.01
+Tracking speed: 182.2 FPS
+Tracker failed 2 times
+Average overlap (full sequence): 0.581
+
+Alpha: 0.7465517241379311, Sigma: 2, Lambda: 0.01
+Tracking speed: 197.0 FPS
+Tracker failed 2 times
+Average overlap (full sequence): 0.581
+
+Alpha: 0.7772413793103449, Sigma: 2, Lambda: 0.01
+Tracking speed: 172.8 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.583
+
+Alpha: 0.8079310344827587, Sigma: 2, Lambda: 0.01
+Tracking speed: 242.9 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.581
+
+Alpha: 0.8386206896551724, Sigma: 2, Lambda: 0.01
+Tracking speed: 183.2 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.580
+
+Alpha: 0.8693103448275863, Sigma: 2, Lambda: 0.01
+Tracking speed: 173.1 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.579
+
+Alpha: 0.9, Sigma: 2, Lambda: 0.01
+Tracking speed: 207.9 FPS
+Tracker failed 3 times
+Average overlap (full sequence): 0.578
+

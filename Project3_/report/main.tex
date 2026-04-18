@@ -1,6 +1,7 @@
 \documentclass[9pt]{IEEEtran}
 
 \usepackage[english]{babel}
+\usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{fancyhdr}
@@ -32,7 +33,6 @@
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor trig-gs}
-
 % ============================================================================================
 
 \title{\vspace{0ex}
@@ -58,10 +58,47 @@ accuracy and robustness.
 The tracker was implemented using a simplified MOSS approach. 
 
 \subsection{Analysis of parameters}
+We analyzed how the learning rate $\alpha$ and the gaussian kernel bandwidth $\sigma$ influence the tracker's performance.
+Testing the tracker on the different sequences from the VOT2014 dataset, we found that a high learning rate (close to $1$) allows the tracker
+to quickly adapt to changes in the targets appearance, but it can lead to instability, as it makes it more sensitive to occlusions (TODO woman example).
+Our thought was that a higher learning rate would then work best on the sequence with more dynamic targets (like in bolt and gymnastic). However, when
+tested on such sequences, we found that for all a learning rate at around $0.1$ to $0.3$ gives the best performance, when it comes to
+average overlap between the predicted and the ground truth bounding boxes. (TODO: add plots for all three sequences of the avg overlap).
+As seen in figure (TODO add) the graph is reverse U shaped, with the best performance close to the middle.
+
+Focusing on the kernel bandwidth $\sigma$
+
 
 \subsection{Larger patch}
+With the idea of capturing more background for better filter learning, we tested the tracker with patches larger than the target.
+So we extracted patches that were enlarged by some factor and then trained the filter on those. But the reported region (so the bounding box that the tracker returns) was
+still the same as the target size. Just to calculate the new center we used a larger window. This approach sometimes improved the performance,
+TODO especially when the target was moving fast and changing its appearance (gymnastics?). But a larger patch
+also made the tracker more sensitive to occlusions and background clutter, which could lead to more tracking failures. 
+TODO add example of failures with larger patches. 
+
+
+
+
+
 
 \subsection{Tracking speed}
+Using the VOT-lite toolkit, we tested our tracker on the VOT2014 dataset and got the results seen in table~\ref{tab:tracker_results}.
+
+
+\begin{table}[h!]
+    \centering
+    \resizebox{0.25\textwidth}{!}{
+    \begin{tabular}{|c|c|}
+    \hline
+    Average overlap  & 0.47 \\ 
+    Total failures & 66 \\
+    Average speed (FPS) & 814.30 \\
+    Total frames & 10213 \\ \hline
+    \end{tabular}}
+    \caption{Tracker results on the VOT2014 dataset.}\label{tab:tracker_results}
+\end{table}
+
 
 \section{Conclusion}
 

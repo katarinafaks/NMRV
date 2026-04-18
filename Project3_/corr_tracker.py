@@ -6,8 +6,8 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'toolkit-dir', 'pytracking-toolkit-lite', 'utils'))
-from tracker import Tracker   
-# from ex2_utils import  Tracker
+from tracker import Tracker  #To run toolkit without errors
+# from ex2_utils import  Tracker #To run run_tracker.py without errors
 
 from ex2_utils import  get_patch
 from ex3_utils import create_cosine_window, create_gauss_peak
@@ -15,6 +15,7 @@ from ex3_utils import create_cosine_window, create_gauss_peak
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
+
 
 
 
@@ -104,6 +105,12 @@ class CorrelationTracker(Tracker):
         # plt.title('Correlation response')
         # plt.show()   
         
+        # R_real = np.fft.fftshift(np.real(R)) # Shift so peak is in center for visualization
+        # # Visualization for report:
+        # plt.imshow(R_real, cmap='hot')
+        # plt.title(f'Response map with sigma={self.sigma}')
+        # plt.show()
+        
         
         vmax,hmax = np.unravel_index(np.argmax(R), R.shape)
         #plot R and the peak:
@@ -116,9 +123,9 @@ class CorrelationTracker(Tracker):
         # print(f"Raw Peak: {vmax, hmax}")
         #cetner peak relative to patch center -- period shift from fft?.could be a problem!
         if vmax > self.target_size[1] / 2:
-            vmax = vmax - self.target_size[1]
+            vmax -=  self.target_size[1]
         if hmax > self.target_size[0] / 2:
-            hmax = hmax - self.target_size[0]
+            hmax -= self.target_size[0]
         # print(f"Shifted Peak: {vmax, hmax}")
         self.center = (self.center[0] + hmax, self.center[1] + vmax)
         
@@ -154,14 +161,14 @@ class CorrelationTracker(Tracker):
         # print(f"Max filter response: {np.max(self.H_hat_conj)}")
         
         #return the new bounding box:
-        bb = [self.center[0] - self.target_size[0]/2, 
-              self.center[1] - self.target_size[1]/2, 
-              self.width, self.height]
+        bb = [self.center[0] - self.width/2, 
+              self.center[1] - self.height/2, 
+               self.width, self.height] 
         return bb
         
         
 
-# any params? - alpha?
+# Needed to run the tracker using run_tracker.py with ex2_utils.py
 class CorrelationParams():
     def __init__(self):
         pass
