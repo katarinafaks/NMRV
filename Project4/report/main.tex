@@ -48,11 +48,12 @@ Project 4: Advanced Tracking}
 
 \section{Introduction}
 
-In this assignment, we addressed more complex tracking approaches by implementing a motion 
-prediction model using a Kalman filter, and a sequential optimization tracker based on a Particle 
-filter. First, we experimented with Kalman filters outside of the tracking scenario to analyze the
- properties of Random Walk (RW), Nearly-Constant Velocity (NCV), and Nearly-Constant Acceleration 
- (NCA) motion models on synthetically generated curves. In the second part, we implemented a 
+In this assignment, we tested how motion models combined with the Kalman filter can be used to predict the future position of an object.
+We tested three different models: Random Walk, Nearly Constant Velocity and Nearly Constant Acceleration and
+analyzed how the parameters of the Kalman filter affect the performance of the tracking. We also
+implemented a Particle filter tracker... TODO
+
+ In the second part, we implemented a 
  Particle filter tracker that utilizes the NCV motion model and a color histogram visual model.
   We integrated our tracker into the VOT-lite evaluation toolkit and analyzed its performance 
   across different parameters, motion models, and sample sizes on the VOT2014 dataset.
@@ -60,23 +61,60 @@ filter. First, we experimented with Kalman filters outside of the tracking scena
 \section{Experiments}
 
 \subsection{Motion Models and Kalman Filters}
-We began by testing the Kalman filter on an artificial spiral curve using three different 
-motion models: RW, NCV, and NCA. The matrices governing these systems ($X, F, \Phi, L, Q, H$) 
-are detailed in the Appendix.The behavior of the Kalman filter was heavily dependent on the 
-process noise covariance ($q$) and the measurement noise covariance ($r$). Setting a high $q$ 
-(e.g., $q=100.0, r=1.0$) caused the filter to heavily trust the noisy measurements, resulting 
-in a jagged, unfiltered trajectory regardless of the motion model. Conversely, lowering $q$ 
-and increasing $r$ (e.g., $q=1.0, r=5.0$) smoothed the trajectory significantly, as the filter 
-trusted its internal motion predictions over the noisy measurements.Comparing the models, 
-RW performed poorly on sharp turns, often lagging behind the measurements because it assumes 
-velocity is purely noise-driven. NCV successfully tracked the spiral by maintaining momentum,
- yielding the best balance of smoothing and accuracy. NCA overcompensated during tight curves
-  because it modeled acceleration, causing it to overshoot when the curve's radius changed rapidly.
-  To further evaluate the models, we tested the Kalman filter on a step/rectangle path and a sine
-   wave. On the rectangle path, NCV struggled slightly at the 90-degree corners, heavily 
-   overshooting due to its momentum, whereas RW quickly adjusted to the new stationary 
-   coordinates. On the sine wave, NCV performed smoothly, while NCA provided the tightest 
-   tracking of the continuous directional shifts, though it was highly sensitive to noise spikes.
+
+We first ran the Kalman filter method on a spiral curve using RW, NCV and NCA motion models. The matrices that we used
+are in the appendix section.
+Using different values of parameters $q$ and $r$ we observed how the filters performance changed. In figure~\ref{fig:kalman:diff_params} we
+can see the effect of setting $q = [1,5,100]$ and $r = [1,5,100]$. We're interested in the relationship between these two parameters.
+When they are both small the filter is trusting both the model and the measurments.
+Setting $q$ to $100$  (and leaving $r$ small) meant that the motion model is highly uncertain, so the object 
+might deviate a lot from the predicted path. 
+So the filter trusts the measurments almost entirely (as we can see in the figure). Setting $q$ to a 
+smaller value the filter will trust the motion model more so the trajectory is smoother,
+but it doesn't follow the measurments as closely. Setting $r$ to a smaller value means
+that the measurments are more accurate, so the filter will trust them more. Like in the figure where $q$ was large
+and $r$ was small for all three models. But when $r$ is large the filter will rely mostly on 
+the internal prediction of the model. As seen in the last column of the figure. When $q$ is small
+and $r = 100$ the filter is not following the measurments at all.
+ Especially in random walk we can see how the filter is lagging behind the measurments at sharp turns as it assumes the object is static. Which is why
+it's also mostly always "behind" the measurments with other parameters as well. 
+For the NCV model it follows the measured spiral better, because it also tracks velocity.
+The NCA model overshot the curve at tight corners because it also tracks acceleration, which becomes
+a problem when the curves radius changed quickly.
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.3\textwidth]{Figures/kalman_diff_params.png}
+    \caption{Kalman filter performance. Blue curve: filtered trajectory, Red curve: measured trajectory}
+    \label{fig:kalman:diff_params}
+\end{figure}
+
+We also ran the tests on a rectangle path as seen in figure~\ref{fig:kalman:rectangle}. We can see
+that all the models struggle with the 90 degree corners when $q = 1, r= 5$ (meaning the filter trusts the model more than the measurments)
+since the assume the objects travels at a straight line. The RW is the worst at handling the corners, because it has no momentum,
+the other two are better at it, but still overshoot the corners. When $q$ is large and $r$ is small, random walk
+fails completely (as expected with no momentum) and NCA performs the best as it can quickly adjust to the new direction.
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.3\textwidth]{Figures/kalman_rectangle.png}
+    \caption{Kalman filter performance on rectangle path. Blue curve: filtered trajectory, Red curve: measured trajectory}
+    \label{fig:kalman:rectangle}
+\end{figure}
+
+We also tested the filters on a sine wave path as seen in figure~\ref{fig:kalman:sine}. Again 
+the RW model performs the worst when it the filter trusts the model more than the measurments. While
+the NCV model performs well, it's faster than the measurments since it assumes a nearly constant velocity.
+But the NCA model performs the best, because it quickly adjusts to the changing direction.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.3\textwidth]{Figures/kalman_sine.png}
+    \caption{Kalman filter performance on sine wave path. Blue curve: filtered trajectory, Red curve: measured trajectory}
+    \label{fig:kalman:sine}
+\end{figure}
 
 
 \subsection{Particle Filter Tracker}
@@ -134,6 +172,72 @@ We found that the Nearly-Constant Velocity (NCV) model provides the best motion 
  robust tracking at near real-time speeds (~69 FPS). While the color histogram is a reliable 
  visual model, it remains susceptible to background distractors of similar colors, suggesting 
  that combining it with a spatial template could further improve robustness.
+
+
+
+\appendix
+\textbf{1. Random walk:}
+State vector: $X = [x, y]^\top$ \\
+$F = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$, \\
+$\Phi = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$, \\
+$L = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$, \\
+$Q = q \Delta t \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$, \\
+$H = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$ \\
+
+
+\textbf{2. NCV:}
+State vector: $X = [x,  y,\dot{x},\dot{y}]^\top$ \\
+$F = \begin{bmatrix} 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}$, \\
+$L = \begin{bmatrix} 0 & 0 \\ 0 & 0 \\ 1 & 0 \\ 0 & 1 \end{bmatrix}$, \\
+$ \Phi = \begin{bmatrix} 1 & 0 & \Delta t & 0  \\ 0 & 1 & 0 & \Delta t  
+  \\ 0 & 0 & 1 & 0  \\ 0 & 0 & 0 & 1  \end{bmatrix}$, \\
+$ Q = q \begin{bmatrix} \frac{\Delta t^3}{3} &  0 &\frac{\Delta t^2}{2}& 0  \\  
+  0 & \frac{\Delta t^3}{3} & 0 & \frac{\Delta t^2}{2}  \\ 
+  \frac{\Delta t^2}{2} & 0 & \Delta t & 0  \\ 
+  0  & \frac{\Delta t^2}{2} & 0 & \Delta t 
+\end{bmatrix}$, \\
+$ H = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \end{bmatrix}$ \\
+
+
+\textbf{3. NCA:}
+State vector: $X = [x, y, \dot{x}, \dot{y}, \ddot{x}, \ddot{y}]^\top$ \\  
+$ F = \begin{bmatrix} 
+  0 & 0 & 1 & 0 & 0 & 0 \\ 
+  0 & 0 & 0 & 1 & 0 & 0 \\
+  0 & 0 & 0 & 0 & 1 & 0 \\ 
+  0 & 0 & 0 & 0 & 0 & 1 \\ 
+  0 & 0 & 0 & 0 & 0 & 0 \\ 
+  0 & 0 & 0 & 0 & 0 & 0 
+  \end{bmatrix}$, \\
+$ \Phi = \begin{bmatrix}
+1 & 0 & \Delta t & 0 & \frac{\Delta t^2}{2} & 0 \\
+0 & 1 & 0 & \Delta t & 0 & \frac{\Delta t^2}{2} \\
+0 & 0 & 1 & 0 & \Delta t & 0 \\
+0 & 0 & 0 & 1 & 0 & \Delta t \\
+0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1
+\end{bmatrix}$, \\
+$ L = \begin{bmatrix}
+  0 & 0 \\
+  0 & 0 \\
+  0 & 0 \\
+  0 & 0 \\
+  1 & 0 \\
+  0 & 1
+\end{bmatrix}$, \\
+$ Q = q \begin{bmatrix}
+\frac{\Delta t^5}{20} & 0 & \frac{\Delta t^4}{8} & 0 & \frac{\Delta t^3}{6} & 0 \\
+0 & \frac{\Delta t^5}{20} & 0 & \frac{\Delta t^4}{8} & 0 & \frac{\Delta t^3}{6} \\
+\frac{\Delta t^4}{8} & 0 & \frac{\Delta t^3}{3} & 0 & \frac{\Delta t^2}{2} & 0 \\
+0 & \frac{\Delta t^4}{8} & 0 & \frac{\Delta t^3}{3} & 0 & \frac{\Delta t^2}{2} \\
+\frac{\Delta t^3}{6} & 0 & \frac{\Delta t^2}{2} & 0 &  \Delta t & 0 \\
+0 & \frac{\Delta t^3}{6} & 0 & \frac{\Delta t^2}{2} & 0 & \Delta t
+\end{bmatrix}$, \\
+$H = \begin{bmatrix}
+1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0
+\end{bmatrix}$ \\
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography}
