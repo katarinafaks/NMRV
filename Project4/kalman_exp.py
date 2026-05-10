@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from ex4_utils import kalman_step
 
 def get_matrices(model, dt, q):
-    """Returns A (Phi), C (H), and Q za dan model."""
+    """Returna A (Phi), C (H), and Q za dan model."""
     if model == 'RW':
         A = np.eye(2, dtype=np.float32)
         C = np.eye(2, dtype=np.float32)
@@ -65,9 +65,12 @@ def run_kalman(x, y, model, q, r, dt=1.0):
     state[0, 0] = x[0]
     state[1, 0] = y[0]
     
-    #initial covariance set to identity with large variance:
+    
     L = 10.0
-    covariance = L*np.eye(state_dim, dtype=np.float32)
+    covariance = np.eye(state_dim, dtype=np.float32)
+    covariance[0,0] = L
+    covariance[1,1] = L
+    covariance[2:, 2:] = np.eye(state_dim-2, dtype=np.float32) * (L*2)
     
     filtered_x, filtered_y = [x[0]], [y[0]]
     
@@ -99,13 +102,13 @@ for i, model in enumerate(['RW', 'NCV', 'NCA']):
         for q in qs:
             fx, fy = run_kalman(x, y, model, q=q, r=r)
             plt.subplot(3, 4, plot_idx)
-            plt.plot(x, y, 'r-',alpha = 0.6)
-            plt.plot(x, y, 'ro',markerfacecolor='none',alpha  = 0.3)
-            plt.plot(fx, fy, 'b-',alpha = 0.6)
-            plt.plot(fx, fy, 'bo',markerfacecolor='none',alpha = 0.3)
+            plt.plot(x, y, 'r-', alpha=0.6)
+            plt.plot(x, y, 'o', markerfacecolor='none', markeredgecolor='red', alpha=0.7, markersize=3, markeredgewidth=1.2)
+            plt.plot(fx, fy, 'b-', alpha=0.6)
+            plt.plot(fx, fy, 'o', markerfacecolor='none', markeredgecolor='blue', alpha=0.7, markersize=3, markeredgewidth=1.2)
             plt.title(f'{model} (q={q}, r={r})')
             plot_idx += 1
-            if r !=1:
+            if r!= 1:
                 break
 plt.tight_layout(pad=3.0, w_pad=2.0, h_pad=2.0)
 plt.show()

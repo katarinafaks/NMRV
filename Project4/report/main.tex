@@ -1,6 +1,7 @@
 \documentclass[9pt]{IEEEtran}
 
 \usepackage[english]{babel}
+\usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{fancyhdr}
@@ -19,6 +20,7 @@
 \usepackage{longtable}
 \usepackage{supertabular}
 \usepackage{multicol}
+\usepackage{booktabs}
 
 \usepackage[utf8x]{inputenc}
 
@@ -51,12 +53,9 @@ Project 4: Advanced Tracking}
 In this assignment, we tested how motion models combined with the Kalman filter can be used to predict the future position of an object.
 We tested three different models: Random Walk, Nearly Constant Velocity and Nearly Constant Acceleration and
 analyzed how the parameters of the Kalman filter affect the performance of the tracking. We also
-implemented a Particle filter tracker... TODO
-
- In the second part, we implemented a 
- Particle filter tracker that utilizes the NCV motion model and a color histogram visual model.
-  We integrated our tracker into the VOT-lite evaluation toolkit and analyzed its performance 
-  across different parameters, motion models, and sample sizes on the VOT2014 dataset.
+implemented a Particle filter tracker and analyzed how different parameters of the tracker affect the performance. 
+We tested our implementation on the VOT2014 dataset and analyzed the results in terms of average overlap,
+number of failures and tracking speed. 
 
 \section{Experiments}
 
@@ -73,122 +72,137 @@ So the filter trusts the measurments almost entirely (as we can see in the figur
 smaller value the filter will trust the motion model more so the trajectory is smoother,
 but it doesn't follow the measurments as closely. Setting $r$ to a smaller value means
 that the measurments are more accurate, so the filter will trust them more. Like in the figure where $q$ was large
-and $r$ was small for all three models. But when $r$ is large the filter will rely mostly on 
-the internal prediction of the model. As seen in the last column of the figure. When $q$ is small
-and $r = 100$ the filter is not following the measurments at all.
- Especially in random walk we can see how the filter is lagging behind the measurments at sharp turns as it assumes the object is static. Which is why
-it's also mostly always "behind" the measurments with other parameters as well. 
-For the NCV model it follows the measured spiral better, because it also tracks velocity.
-The NCA model overshot the curve at tight corners because it also tracks acceleration, which becomes
+and $r$ was small for all three models.
+The RW model is especially sensitive as it lacks momentum, it relies completely on measurments to follow the curve. We can see how the filter
+is lagging behind the measurments at sharp turn as it assumes the object is static. The NCV model is better at following the spiral, because
+it also tracks velocity. Whereas the NCA model overshot the curve at tight corners because it also tracks acceleration, which becomes
 a problem when the curves radius changed quickly.
+
 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.3\textwidth]{Figures/kalman_diff_params.png}
+    \includegraphics[width=0.5\textwidth]{Figures/kalman_diff_params.png}
     \caption{Kalman filter performance. Blue curve: filtered trajectory, Red curve: measured trajectory}
     \label{fig:kalman:diff_params}
 \end{figure}
 
 We also ran the tests on a rectangle path as seen in figure~\ref{fig:kalman:rectangle}. We can see
-that all the models struggle with the 90 degree corners when $q = 1, r= 5$ (meaning the filter trusts the model more than the measurments)
+that all the models struggle with the 90 degree corners when $r > q$ (meaning the filter trusts the model more than the measurments)
 since the assume the objects travels at a straight line. The RW is the worst at handling the corners, because it has no momentum,
-the other two are better at it, but still overshoot the corners. When $q$ is large and $r$ is small, random walk
+the other two are better at it, but still overshoot the corners. When $q > r$, random walk
 fails completely (as expected with no momentum) and NCA performs the best as it can quickly adjust to the new direction.
-
+On the sine wave path (figure~\ref{fig:kalman:sine}) NCV model performs well, it's "faster" than the measurments since it assumes a nearly constant velocity.
+NCa model performs the best, because it quikcly adjusts to the changing direction, but RW model performs worst when we're trusting the model more
+than the measurments.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.3\textwidth]{Figures/kalman_rectangle.png}
+    \includegraphics[width=0.4\textwidth]{Figures/kalman_rectangle.png}
     \caption{Kalman filter performance on rectangle path. Blue curve: filtered trajectory, Red curve: measured trajectory}
     \label{fig:kalman:rectangle}
 \end{figure}
 
-We also tested the filters on a sine wave path as seen in figure~\ref{fig:kalman:sine}. Again 
-the RW model performs the worst when it the filter trusts the model more than the measurments. While
-the NCV model performs well, it's faster than the measurments since it assumes a nearly constant velocity.
-But the NCA model performs the best, because it quickly adjusts to the changing direction.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.3\textwidth]{Figures/kalman_sine.png}
+    \includegraphics[width=0.4\textwidth]{Figures/kalman_sine.png}
     \caption{Kalman filter performance on sine wave path. Blue curve: filtered trajectory, Red curve: measured trajectory}
     \label{fig:kalman:sine}
 \end{figure}
 
 
 \subsection{Particle Filter Tracker}
-The Particle filter was implemented by maintaining $N$ particles representing possible 
-states of the target. At each frame, we resampled the particles based on their weights,
- propagated them using the selected motion model with added Gaussian noise (sampled from $Q$),
-  and recalculated their weights using the Hellinger distance between the extracted color 
-  histogram of the particle patch and the target's visual model. The final bounding box was 
-  determined by a weighted average of the particles.We used an Epanechnikov kernel for histogram 
-  extraction to give more importance to the center of the patch, and updated the target visual
-   model at each frame using an exponential moving average ($\alpha=0.05$).
-   
-\subsubsection{Baseline Performance} 
-Using the NCV motion model, $N=100$ particles, and an HSV color space, we tested the tracker 
-on 5 sequences from the VOT dataset. The parameter $q$ was set proportionally to the target size 
-($q=5.0$).
+We implemented the particle filter tracker using the NCV motion model and a color histogram visual model using Hellinger
+distance to measure similarity between histograms. We also used na Epanechnikov kernel to give more weight
+to pixels closer to the center of the target when extracting the histogram.The visual model is then updated using
+a factor $\alpha$ to control how much the model should adapt to changes in the targets appearance.
+We used $N$ particles to represent possible states of the 
+target. We tested the tracker on the VOT2014 dataset
+and got the following results: average overlap over all sequences of $0.48$, total number of failures
+$55$ and average tracking speed of $41.4$ FPS. Note that for this experiment we used the following parameters:
+$N = 100$ particles, $q = 0.1 * ||\text{target size}||$, color histogram with $16$ bins,
+epanechnikov kernel for histogram extraction and $\alpha = 0.05$ for visual model update. We noticed that NCV provided a robust prior for standard objects, but the color histogram was sensitive to 
+rapid scale changes and illumintation shift, which lead to failures in some sequences.
 
-The tracker proved robust on sequences with consistent target color and smooth motion 
-(e.g., car, jogging). However, in sequences with rapid scale changes or severe illumination 
-shifts (e.g., hand), the color histogram visual model struggled, resulting in lower overlap 
-and more failures. The average speed was approximately 69 FPS, which is computationally 
-heavier than the correlation filter from Exercise 3 due to the multiple patch extractions 
-required per frame.
+\subsubsection{Number of particles}
+The number of particles $N$ is critical for speed of the tracker, as each particle requires histogram extraction
+and weight calculation. We tested $5$ sequences with $N = [200,100,50,25]$ and got the results seen in 
+table~\ref{tab:particle:N_diff}. Descreasing the number of particles significantly increased the speed of the tracking. This
+makes sense since less particles means less histogram extractions and weight calculations. However, the average overlap
+and failures did not change significantly. It seems that the optimal number of particles is $100$ since it provided
+a good balance between accuracy, robustness and speed. Interestingly when $N=200$ the number of failures was $60$, when
+we'd expect it to be lower. But this could be due to randomness. Maybe it was just "stochastically unlucky" and the
+particles were not well distributed in some frames, causing the tracker to lose the target. Or maybe
+the higher number of particles caused the tracker to be more sensitive to noise in the histogram, which could lead to further failures.
+
+\begin{table}
+  \centering
+  \resizebox{0.4\textwidth}{!}{
+  \begin{tabular}{|c|c|c|c|c|c|}
+  \hline
+  $N$ & 200 & 100 & 50 & 25 \\\hline
+  Average Overlap  & 0.5 & 0.46 & 0.47 & 0.47 \\\hline
+  Failures  & 60 & 56 & 60 & 61 \\\hline
+  FPS  & 35.6 & 40.6 & 67.2 & 98.8\\ \hline
+  \end{tabular}}
+  \caption{Tracker performance with different $N$.}\label{tab:particle:N_diff}
+\end{table}
+
+\subsubsection{Different motion models}
+We also analyzed how the parameters of the tracker influence the performance by focusing on 5 sequences from 
+the dataset. We observed how different motion models (RW, NCV, NCA) affect the trackers performance and focused
+on the impact of parameter $q$. We kept all the parameters the same except for $q$ since in the Kalman filter section
+we observed that RW model is more uncertain than the other two, we set a higher value for $q = 1$ and similarly for NCA model
+we set a lower value for $q = 0.05$  than for NCV model. For the NCA model we also set a higher number of particles ($N = 300$)
+since it has more state variables and is more complex, so it needs more particles to represent the state space. When we
+left it at $100$ initially the performance was very poor. The NCA performs poorly with a high number of failures but
+it does have the highest average overlap. So when the target moves in a predictable way, the NCA model can track it
+but when it changes fast it overshoots and loses the target (as we saw in our Kalman filter analysis).
+The results are shown in table~\ref{tab:particle:motion_models}.
+The NCV model provided the best performance with the highest robusntess and accuracy. 
 
 
-\subsection{Analysis of Tracker Performance}
-Motion Models within the Tracker: We compared the tracker's accuracy and robustness by
- swapping the underlying motion models (Table II).
+\begin{table}
+  \centering
+  \resizebox{0.4\textwidth}{!}{
+  \begin{tabular}{|c|c|c|c|c|c|}
+  \hline
+  Motion Model & RW & NCV & NCA \\\hline
+  Average Overlap  & 0.46 & 0.48 & 0.49 \\\hline
+  Failures  & 60 & 56 & 74 \\hline
+  FPS  & 39 & 40.6 & 25.9\\ \hline
+  \end{tabular}}
+  \caption{Tracker performance with different motion models.}\label{tab:particle:motion_models}
+\end{table}
 
-NCV significantly outperformed RW and NCA. 
-RW failed when targets moved rapidly, as the particles only spread via noise and did 
-not carry momentum, causing the target to leave the particle spread. NCA performed worse than 
-NCV because the acceleration state variables became highly unstable given the noise in bounding 
-box updates, scattering the particles too widely.The parameter $q$ dictates the spread of the 
-particles. We found it must be proportional to the target size; if $q$ is too small, particles 
-collapse into a tight cluster and cannot recover if the target makes sudden movements. 
-If $q$ is too large, particles spread across the entire image, capturing background noise and
- causing catastrophic drifting.Number of Particles ($N$): We observed how the number of samples 
- impacted performance.
+
+
  
-%Table III: Impact of Particle Count ($N$)
-
-Using too few particles ($N=20$) resulted in poor state representation,
- causing frequent failures. Increasing $N$ to 100 drastically improved accuracy and robustness. 
- However, increasing $N$ beyond 100 yielded diminishing returns in overlap while causing tracking
-  speed to plummet linearly, as histogram extraction is required for every particle.
-
-
 \section{Conclusion}
+In this assignment we analyzed how different motion models and parameters of the Kalman filter affect its performance.
+We also implemented a particle filter tracker and analyzed different parameters and their effects. We tested the model
+on the VOT2014 dataset and got decent results, but there are still improvements to be made. For example, we could
+use a more robust visual model that is less sensitiive to scale changes and illumination shifts.
 
-In this exercise, we implemented advanced tracking utilizing Kalman and Particle filters. 
-We found that the Nearly-Constant Velocity (NCV) model provides the best motion prior for
- standard visual objects, balancing momentum and stability. Furthermore, optimizing 
- the number of particles is crucial; $N=100$ served as the ideal "sweet spot" providing 
- robust tracking at near real-time speeds (~69 FPS). While the color histogram is a reliable 
- visual model, it remains susceptible to background distractors of similar colors, suggesting 
- that combining it with a spatial template could further improve robustness.
+
 
 
 
 \appendix
 \textbf{1. Random walk:}
 State vector: $X = [x, y]^\top$ \\
-$F = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$, \\
+$F = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$, 
 $\Phi = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$, \\
-$L = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$, \\
+$L = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$, 
 $Q = q \Delta t \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$, \\
 $H = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$ \\
 
 
 \textbf{2. NCV:}
-State vector: $X = [x,  y,\dot{x},\dot{y}]^\top$ \\
+State vector: $X = [x,  y,\dot{x},\dot{y}]^\top$ 
 $F = \begin{bmatrix} 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}$, \\
-$L = \begin{bmatrix} 0 & 0 \\ 0 & 0 \\ 1 & 0 \\ 0 & 1 \end{bmatrix}$, \\
+$L = \begin{bmatrix} 0 & 0 \\ 0 & 0 \\ 1 & 0 \\ 0 & 1 \end{bmatrix}$, 
 $ \Phi = \begin{bmatrix} 1 & 0 & \Delta t & 0  \\ 0 & 1 & 0 & \Delta t  
   \\ 0 & 0 & 1 & 0  \\ 0 & 0 & 0 & 1  \end{bmatrix}$, \\
 $ Q = q \begin{bmatrix} \frac{\Delta t^3}{3} &  0 &\frac{\Delta t^2}{2}& 0  \\  
@@ -200,7 +214,7 @@ $ H = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \end{bmatrix}$ \\
 
 
 \textbf{3. NCA:}
-State vector: $X = [x, y, \dot{x}, \dot{y}, \ddot{x}, \ddot{y}]^\top$ \\  
+State vector: $X = [x, y, \dot{x}, \dot{y}, \ddot{x}, \ddot{y}]^\top$ \\
 $ F = \begin{bmatrix} 
   0 & 0 & 1 & 0 & 0 & 0 \\ 
   0 & 0 & 0 & 1 & 0 & 0 \\
@@ -216,7 +230,7 @@ $ \Phi = \begin{bmatrix}
 0 & 0 & 0 & 1 & 0 & \Delta t \\
 0 & 0 & 0 & 0 & 1 & 0 \\
 0 & 0 & 0 & 0 & 0 & 1
-\end{bmatrix}$, \\
+\end{bmatrix}$, 
 $ L = \begin{bmatrix}
   0 & 0 \\
   0 & 0 \\

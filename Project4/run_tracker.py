@@ -2,6 +2,8 @@ import time
 
 import cv2
 
+from particle_tracker_NCA import ParticleTrackerNCA
+from particle_tracker_RW import ParticleTrackerRW
 from sequence_utils import VOTSequence
 # from ncc_tracker_example import NCCTracker, NCCParams
 # from ms_tracker import MeanShiftTracker, MSParams
@@ -12,7 +14,9 @@ avg_o = []
 avg_o_full = []
 # set the path to directory where you have the sequences
 dataset_path = 'vot14' # TODO: set to the dataset path on your disk
-sequence = 'sunshade'  # choose the sequence you want to test
+
+sequence = 'bolt'  # choose the sequence you want to test
+seq_name = sequence
 
 # visualization and setup parameters
 win_name = 'Tracking window'
@@ -31,7 +35,7 @@ n_failures = 0
 # parameters = MSParams()
 # tracker = MeanShiftTracker(parameters)
 parameters = ParticleParams()
-tracker = ParticleTracker(parameters)
+tracker = ParticleTrackerRW(parameters)
 
 
 time_all = 0
@@ -42,6 +46,7 @@ sequence.initialize_window(win_name)
 frame_idx = 0
 while frame_idx < sequence.length():
     img = cv2.imread(sequence.frame(frame_idx))
+    particles = None
     # initialize or track
     if frame_idx == init_frame:
         # initialize tracker (at the beginning of the sequence or after tracking failure)
@@ -52,8 +57,13 @@ while frame_idx < sequence.length():
     else:
         # track on current frame - predict bounding box
         t_ = time.time()
-        predicted_bbox = tracker.track(img)
+        track_result = tracker.track(img)
         time_all += time.time() - t_
+        
+        # First 4 elements are the bounding box [x, y, w, h]
+        predicted_bbox = track_result[:4]
+        # 5th element contains the particles matrix [N x 4]
+        particles = track_result[4]
 
     # calculate overlap (needed to determine failure of a tracker)
     gt_bb = sequence.get_annotation(frame_idx, type='rectangle')
@@ -64,6 +74,14 @@ while frame_idx < sequence.length():
     # draw ground-truth and predicted bounding boxes, frame numbers and show image
     if show_gt:
         sequence.draw_region(img, gt_bb, (0, 255, 0), 1)
+        
+    # 1. Draw particles if they exist
+    if particles is not None:
+        for p in particles:
+            # p[0] and p[1] are x and y positions
+            px, py = int(p[0]), int(p[1])
+            cv2.circle(img, (px, py), 1, (255, 0, 0), -1) # Blue dots for particles
+            
     sequence.draw_region(img, predicted_bbox, (0, 0, 255), 2)
     sequence.draw_text(img, '%d/%d' % (frame_idx + 1, sequence.length()), (25, 25))
     sequence.draw_text(img, 'Fails: %d' % n_failures, (25, 55))
@@ -100,4 +118,16 @@ if avg_o:
     print('Average overlap: %.3f' % (sum(avg_o) / len(avg_o))) 
 if avg_o_full:
     print('Average overlap (full sequence): %.3f' % (sum(avg_o_full) / len(avg_o_full))) 
+    
+    
+# #write avg_overlap (full), tracking speed and number of failures to a text file
+# # write into a file that may exist already and include the sequence name in the filename
+# results_filename = f'results_100.txt'
+# with open(results_filename, 'a') as f:
+#     f.write(f'Sequence: {seq_name}\n')
+#     f.write(f'Average overlap (full sequence): {sum(avg_o_full) / len(avg_o_full):.3f}\n')
+#     f.write(f'Tracking speed: {sequence.length() / time_all:.1f} FPS\n')
+#     f.write(f'Number of failures: {n_failures}\n')
+
+
 

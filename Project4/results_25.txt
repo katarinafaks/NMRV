@@ -1,0 +1,100 @@
+Sequence: ball
+Average overlap (full sequence): 0.622
+Tracking speed: 94.9 FPS
+Number of failures: 1
+Sequence: basketball
+Average overlap (full sequence): 0.565
+Tracking speed: 56.0 FPS
+Number of failures: 2
+Sequence: bicycle
+Average overlap (full sequence): 0.493
+Tracking speed: 98.2 FPS
+Number of failures: 0
+Sequence: bolt
+Average overlap (full sequence): 0.471
+Tracking speed: 98.2 FPS
+Number of failures: 3
+Sequence: car
+Average overlap (full sequence): 0.398
+Tracking speed: 113.7 FPS
+Number of failures: 0
+Sequence: david
+Average overlap (full sequence): 0.439
+Tracking speed: 90.1 FPS
+Number of failures: 3
+Sequence: diving
+Average overlap (full sequence): 0.386
+Tracking speed: 94.2 FPS
+Number of failures: 2
+Sequence: drunk
+Average overlap (full sequence): 0.504
+Tracking speed: 46.1 FPS
+Number of failures: 1
+Sequence: fernando
+Average overlap (full sequence): 0.392
+Tracking speed: 36.2 FPS
+Number of failures: 2
+Sequence: fish1
+Average overlap (full sequence): 0.315
+Tracking speed: 111.0 FPS
+Number of failures: 6
+Sequence: fish2
+Average overlap (full sequence): 0.287
+Tracking speed: 95.4 FPS
+Number of failures: 4
+Sequence: gymnastics
+Average overlap (full sequence): 0.526
+Tracking speed: 95.1 FPS
+Number of failures: 1
+Sequence: hand1
+Average overlap (full sequence): 0.365
+Tracking speed: 159.2 FPS
+Number of failures: 5
+Sequence: hand2
+Average overlap (full sequence): 0.332
+Tracking speed: 142.6 FPS
+Number of failures: 3
+Sequence: jogging
+Average overlap (full sequence): 0.700
+Tracking speed: 100.9 FPS
+Number of failures: 2
+Sequence: motocross
+Average overlap (full sequence): 0.430
+Tracking speed: 65.7 FPS
+Number of failures: 4
+Sequence: polarbear
+Average overlap (full sequence): 0.639
+Tracking speed: 113.3 FPS
+Number of failures: 0
+Sequence: skating
+Average overlap (full sequence): 0.461
+Tracking speed: 85.2 FPS
+Number of failures: 8
+Sequence: sphere
+Average overlap (full sequence): 0.537
+Tracking speed: 79.4 FPS
+Number of failures: 2
+Sequence: sunshade
+Average overlap (full sequence): 0.536
+Tracking speed: 103.3 FPS
+Number of failures: 0
+Sequence: surfing
+Average overlap (full sequence): 0.661
+Tracking speed: 179.5 FPS
+Number of failures: 0
+Sequence: torus
+Average overlap (full sequence): 0.474
+Tracking speed: 95.2 FPS
+Number of failures: 1
+Sequence: trellis
+Average overlap (full sequence): 0.387
+Tracking speed: 111.6 FPS
+Number of failures: 1
+Sequence: tunnel
+Average overlap (full sequence): 0.434
+Tracking speed: 105.6 FPS
+Number of failures: 5
+Sequence: woman
+Average overlap (full sequence): 0.455
+Tracking speed: 99.2 FPS
+Number of failures: 5
