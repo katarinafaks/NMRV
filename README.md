@@ -101,3 +101,6 @@ Folder: `/home/runner/work/NMRV/NMRV/Project5`
 - Most scripts assume a local VOT-style dataset path (commonly set as `vot14` or via CLI arguments).
 - Many runner scripts open OpenCV windows for interactive visualization.
 - Project 5 requires PyTorch and a SiamFC network weights file (e.g., `siamfc_net.pth`).
+
+
+This project was done for the class Advanced methods in computer vision (UL FRI).
